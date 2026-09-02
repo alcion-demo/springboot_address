@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.address_book.Contact;
 import com.example.address_book.service.ContactService;
 
+import jakarta.validation.Valid;
+
 
 @RestController
 public class ContactController {
@@ -32,14 +34,14 @@ public class ContactController {
     }
 
     @PostMapping("/contacts")
-    public Contact create(@RequestBody Contact contact) {
+    public Contact create(@Valid @RequestBody Contact contact) {
         return contactService.create(contact);
     }
 
     @PutMapping("/contacts/{id}")
     public Contact update(
             @PathVariable Long id,
-            @RequestBody Contact contact) {
+            @Valid @RequestBody Contact contact) {
 
         return contactService.update(id, contact);
     }

@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity //DBのEntityとして扱う
 
@@ -32,14 +34,18 @@ public class Contact {
         return id;
     }
 
+    @NotBlank
     public String getName() {
         return name;
     }
 
+    @NotBlank
     public String getPhone() {
         return phone;
     }
 
+    @NotBlank
+    @Email
     public String getEmail() {
         return email;
     }
