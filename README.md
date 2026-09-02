@@ -68,6 +68,10 @@ docker-compose up --build
 ```
 docker compose restart app
 ```
+※コンパイル
+```
+./mvnw clean compile
+```
 
 ## ディレクトリ構成（主要ファイル）
 ルートから見た主なファイル/フォルダの説明です。
