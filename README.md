@@ -2,10 +2,11 @@
 
  <img alt="Static Badge" src="https://img.shields.io/badge/wsl2-w?style=plastic&logo=linux&logoColor=000000&labelColor=%23FCC624&color=%23FCC624"> <img alt="Static Badge" src="https://img.shields.io/badge/ubuntu-u?style=plastic&logo=ubuntu&logoColor=%23ffffff&labelColor=%23E95420&color=%23E95420">
  <img alt="Static Badge" src="https://img.shields.io/badge/Docker-d?style=plastic&logo=docker&logoColor=%23ffffff&labelColor=%232496ED&color=%232496ED">
- <img alt="Static Badge" src="https://img.shields.io/badge/MySQL-m?style=plastic&logo=mysql&logoColor=%23ffffff&labelColor=%234479A1&color=%234479A1">  
- <img alt="Static Badge" src="https://img.shields.io/badge/Apache%20Maven-%20?style=plastic&logo=Apache%20Maven&logoColor=%23C71A36&color=000000">
+ <img alt="Static Badge" src="https://img.shields.io/badge/Apache%20Maven-%20?style=plastic&logo=Apache%20Maven&logoColor=%23C71A36&color=000000">  
+ <img alt="Static Badge" src="https://img.shields.io/badge/OpenJDK-j?style=plastic&logo=openjdk&logoColor=%23000000">
  <img alt="Static Badge" src="https://img.shields.io/badge/Spring%20Boot-s?style=plastic&logo=springboot&logoColor=%23005F0F">
- <img alt="Static Badge" src="https://img.shields.io/badge/OpenJDK-j?style=plastic&logo=openjdk&logoColor=%23000000">  
+ <img alt="Static Badge" src="https://img.shields.io/badge/Thymeleaf-t?style=plastic&logo=thymeleaf&logoColor=%23005F0F">
+ <img alt="Static Badge" src="https://img.shields.io/badge/MySQL-m?style=plastic&logo=mysql&logoColor=%23ffffff&labelColor=%234479A1&color=%234479A1">  
 
 ## プロジェクト概要
 このリポジトリは、Java と Spring Boot を使って作成したシンプルな 住所録のサンプルアプリです。  
@@ -71,6 +72,15 @@ docker compose restart app
 ※コンパイル
 ```
 ./mvnw clean compile
+```
+
+### 5. Thymeleaf追加
+pom.xmlに下記追加
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-thymeleaf</artifactId>
+</dependency>docker compose restart app
 ```
 
 ## ディレクトリ構成（主要ファイル）

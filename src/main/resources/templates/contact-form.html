@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <head th:replace="~{layout :: head}">
+    </head>
+
+    <body>
+        <div class="container mt-4">
+            <h1 class="border-bottom border-primary border-3 pb-2 mb-4">
+                新規登録
+            </h1>
+            <form th:object="${contact}" th:action="@{/contacts/view/create}" method="post">
+                <div class="mb-3 w-70">
+                    <label class="form-label">名前</label>
+                    <input type="text" th:field="*{name}" class="form-control">
+
+                    <div th:if="${#fields.hasErrors('name')}"
+                        th:errors="*{name}"
+                        class="text-danger">
+                    </div>
+                </div>
+
+                <div class="mb-3 w-70">
+                    <label class="form-label">電話番号</label>
+                    <input type="text" th:field="*{phone}" class="form-control">
+
+                    <div th:if="${#fields.hasErrors('phone')}"
+                        th:errors="*{phone}"
+                        class="text-danger">
+                    </div>
+                </div>
+
+                <div class="mb-3 w-70">
+                    <label class="form-label">メール</label>
+                    <input type="text" th:field="*{email}" class="form-control">
+
+                    <div th:if="${#fields.hasErrors('email')}"
+                        th:errors="*{email}"
+                        class="text-danger">
+                    </div>
+                </div>
+
+                <div class="mb-3 w-70">
+                    <label class="form-label">住所</label>
+                    <input type="text" th:field="*{address}" class="form-control">
+
+                    <div th:if="${#fields.hasErrors('address')}"
+                        th:errors="*{address}"
+                        class="text-danger">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    登録
+                </button>
+
+                <a href="/contacts/view" class="btn btn-secondary ms-2">
+                    キャンセル
+                </a>
+            </form>
+        </div>
+    </body>
+</html>

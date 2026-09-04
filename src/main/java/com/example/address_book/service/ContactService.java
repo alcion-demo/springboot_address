@@ -4,6 +4,8 @@ import com.example.address_book.Contact;
 import com.example.address_book.repository.ContactRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 public class ContactService {
@@ -17,8 +19,8 @@ public class ContactService {
         this.contactRepository = contactRepository;
     }
 
-    public List<Contact> findAll() {
-        return contactRepository.findAll();
+    public Page<Contact> findAll(Pageable pageable) {
+        return contactRepository.findAll(pageable);
     }
 
     public Contact create(Contact contact) {
@@ -40,4 +42,11 @@ public class ContactService {
         contactRepository.deleteById(id);
     }
 
+    public Contact findById(Long id) {
+        return contactRepository.findById(id).orElseThrow();
+    }
+
+    public void deleteAll(List<Long> ids) {
+        contactRepository.deleteAllById(ids);
+    }
 }
