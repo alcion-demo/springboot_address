@@ -10,6 +10,9 @@
                 編集
             </h1>
             <form th:object="${contact}" th:action="@{/contacts/view/edit/{id}(id=${contact.id})}" method="post">
+                <input type="hidden"
+                    th:name="${_csrf.parameterName}"
+                    th:value="${_csrf.token}">
                 <div class="mb-3 w-70">
                     <label class="form-label">名前</label>
                     <input type="text" th:field="*{name}" class="form-control">
@@ -36,6 +39,16 @@
 
                     <div th:if="${#fields.hasErrors('email')}"
                         th:errors="*{email}"
+                        class="text-danger">
+                    </div>
+                </div>
+
+                <div class="mb-3 w-70">
+                    <label class="form-label">郵便番号</label>
+                    <input type="text" th:field="*{postalCode}" class="form-control">
+
+                    <div th:if="${#fields.hasErrors('postalCode')}"
+                        th:errors="*{postalCode}"
                         class="text-danger">
                     </div>
                 </div>

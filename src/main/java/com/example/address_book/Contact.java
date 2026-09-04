@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -20,11 +22,17 @@ public class Contact {
     @GeneratedValue(strategy = GenerationType.IDENTITY) //自動でid振り分け
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     private String name;
 
     private String phone;
 
     private String email;
+
+    private String postalCode;
 
     private String address;
 
@@ -34,6 +42,10 @@ public class Contact {
      */
     public Long getId() {
         return id;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     @NotBlank
@@ -59,6 +71,15 @@ public class Contact {
     }
 
     @NotBlank
+    @Pattern(
+        regexp = "^[0-9]{7}$",
+        message = "郵便番号は7桁の数字で入力してください"
+    )
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    @NotBlank
     @Size(max = 50)
     public String getAddress() {
         return address;
@@ -68,6 +89,10 @@ public class Contact {
      * Setter
      * @param name
      */
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -78,6 +103,10 @@ public class Contact {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
     }
 
     public void setAddress(String address) {

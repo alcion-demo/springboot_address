@@ -13,28 +13,44 @@
 Docker / Maven などの環境構築や設定は自分で検討し、自作しています。
 
 ## 学習・検証目的
-- Java + Spring Boot を使ったサーバーサイド
-- Spring Data JPA を使ったDBアクセス
+- Java + Spring Bootを使ったサーバーサイド開発
+- Spring Data JPAを使ったDBアクセス
 - REST APIによるCRUD処理
-- Thymeleafを使ったサーバーサイドレンダリングの学習
+- Thymeleafを使ったサーバーサイドレンダリング
+- Spring Securityを使った認証・認可
+- Flywayを使ったDBマイグレーション
 
 ---
 
 ## 主な機能
-- REST エンドポイント: `GET /contacts` — 連絡先一覧を返す（`src/main/java/com/example/address_book/controller/ContactController.java`）。
-- REST エンドポイント: `POST /contacts` — 連絡先を作成する（`ContactController`）。
-- JPA エンティティ: `Contact` — フィールド `id, name, phone, email, address` と getter（`src/main/java/com/example/address_book/Contact.java`）。
-- 永続化: `ContactRepository` が `JpaRepository<Contact, Long>` を継承している（`src/main/java/com/example/address_book/repository/ContactRepository.java`）。
-- サービス層: `ContactService` に `findAll()` と `create(Contact)` が定義されている（`src/main/java/com/example/address_book/service/ContactService.java`）。
+- Web UI（Thymeleaf）による画面
+  - ログイン画面: `src/main/resources/templates/login.html`
+  - 新規登録画面: `src/main/resources/templates/register.html`
+  - 連絡先一覧画面: `src/main/resources/templates/contacts.html`
+  - 連絡先作成画面: `src/main/resources/templates/contact-form.html`
+  - 連絡先編集画面: `src/main/resources/templates/contact-edit.html`
+  - レイアウト: `src/main/resources/templates/layout.html`
+  - これらのページを提供するコントローラ: `src/main/java/com/example/address_book/controller/PageController.java`
+- 連絡先（Contact）の CRUD
+  - ThymeleafのWeb画面からのCRUD
+  - REST API: `GET /contacts`, `POST /contacts`, `PUT /contacts/{id}`, `DELETE /contacts/{id}`（実装: `src/main/java/com/example/address_book/controller/ContactController.java`）
+  - サービス層: ページネーション対応 `findAll(User, Pageable)`、作成・更新・削除・一括削除など（`src/main/java/com/example/address_book/service/ContactService.java`）
+- バリデーション: `jakarta.validation` アノテーションが `Contact` / `User` に設定されている（`src/main/java/com/example/address_book/Contact.java`, `src/main/java/com/example/address_book/User.java`）
+- フロント / サーバ間のフォームエラーハンドリング: `ValidationExceptionHandler`（`src/main/java/com/example/address_book/controller/ValidationExceptionHandler.java`）
+- 認証（Spring Security）
+  - 設定: `src/main/java/com/example/address_book/config/SecurityConfig.java`
 
 ## 使用技術
 | カテゴリ | 使用技術 |
 | :--- | :--- |
 | **language** | Java21 |
 | **Framework** | Spring Boot |
+| **Authentication / Authorization** | Spring Security |
+| **Template Engine** | Thymeleaf |
 | **Infrastructure** | Docker Compose ,Maven |
 | **OS Environment** | WSL2 (Ubuntu / Alpine Linux) |
 | **Database** | Spring Data JPA, MySQL |
+| **Database Migration** | Flyway |
 
 
 ## セットアップ手順
@@ -62,7 +78,7 @@ sudo chown -R $USER:$USER target
 
 ### 3. インフラのビルドと起動
 ```
-docker-compose up --build
+docker compose up --build
 ```
 
 ### 4. Spring Bootだけ再起動
@@ -74,45 +90,71 @@ docker compose restart app
 ./mvnw clean compile
 ```
 
-### 5. Thymeleaf追加
+### 5. Thymeleaf、Flyway追加
 pom.xmlに下記追加
 ```
 <dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-thymeleaf</artifactId>
-</dependency>docker compose restart app
+	<groupId>org.flywaydb</groupId>
+	<artifactId>flyway-core</artifactId>
+</dependency>
+<dependency>
+	<groupId>org.flywaydb</groupId>
+	<artifactId>flyway-mysql</artifactId>
+</dependency>
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-flyway</artifactId>
+</dependency>
+```
+application.propertiesを変更・追加
+```
+spring.jpa.hibernate.ddl-auto=validate
+spring.flyway.baseline-on-migrate=true
+```
+
+### 6. 認証の追加
+pom.xmlに下記追加
+```
+<dependency>
+ 	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-security</artifactId>
+</dependency>
 ```
 
 ## ディレクトリ構成（主要ファイル）
 ルートから見た主なファイル/フォルダの説明です。
 
-- [pom.xml](pom.xml)
-- [Dockerfile](Dockerfile)
-- [docker-compose.yml](docker-compose.yml)
-- mvnw, mvnw.cmd
-- src/
-  - main/
-    - java/com/example/address_book/
-      - AddressBookApplication.java
-      - Contact.java
-      - controller/ContactController.java
-      - repository/ContactRepository.java
-      - service/ContactService.java
-    - resources/
-      - application.properties
-  - test/
-    - java/com/example/address_book/AddressBookApplicationTests.java
+- `pom.xml`
+- `Dockerfile`
+- `docker-compose.yml`
+- `src/main/java/com/example/address_book/`
+  - `AddressBookApplication.java`
+  - `Contact.java`, `User.java`
+  - `config/SecurityConfig.java`
+  - `controller/PageController.java`, `controller/ContactController.java`, `controller/ValidationExceptionHandler.java`
+  - `repository/ContactRepository.java`, `repository/UserRepository.java`
+  - `service/ContactService.java`, `service/CustomUserDetailsService.java`
+- `src/main/resources/`
+  - `application.properties`
+  - `db/migration/` (Flyway SQL)
+  - `templates/` (Thymeleaf テンプレート)
 ---
 
 ## 処理の流れ
 ```mermaid
 graph TD
-  Client[クライアント] -->|HTTP GET /contacts| Controller[ContactController]
-  Client -->|HTTP POST /contacts| Controller
-  Controller --> Service[ContactService]
-  Service --> Repo[ContactRepository]
-  Repo --> DB[(MySQL `addressbook`)]
-
+  User[ユーザー] -->|アクセス| WebUI[/login, /register, /contacts/view/.../]
+  WebUI --> PageController[PageController]
+  PageController --> ContactService[ContactService]
+  PageController --> UserRepository[UserRepository]
+  ContactService --> ContactRepository[ContactRepository]
+  ContactRepository --> Database[(MySQL)]
+  UserRepository --> Database
+  LoginForm --> SecurityConfig[SecurityConfig]
+  SecurityConfig --> CustomUserDetailsService[CustomUserDetailsService]
+  CustomUserDetailsService --> UserRepository
+  RESTAPI[/contacts API/] --> ContactController[ContactController]
+  ContactController --> ContactService
 ```
 
 ---
@@ -121,49 +163,80 @@ graph TD
 ```mermaid
 classDiagram
   class Contact {
-    Long id
-    String name
-    String phone
-    String email
-    String address
-    +getId()
-    +getName()
-    +getPhone()
-    +getEmail()
-    +getAddress()
+    +Long id
+    +User user
+    +String name
+    +String phone
+    +String email
+    +String postalCode
+    +String address
   }
-
-  class ContactController {
-    -contactService: ContactService
-    +findAll(): List~Contact~
-    +create(contact: Contact): Contact
+  class User {
+    +Long id
+    +String name
+    +String email
+    +String password
   }
-
-  class ContactService {
-    -contactRepository: ContactRepository
-    +findAll(): List~Contact~
-    +create(contact: Contact): Contact
-  }
-
   class ContactRepository {
     <<interface>>
-    extends JpaRepository~Contact, Long~
+    +findByUser(User, Pageable)
+  }
+  class UserRepository {
+    <<interface>>
+    +findByEmail(String)
+  }
+  class ContactService {
+    +List~Contact~ findAll()
+    +Page~Contact~ findAll(User, Pageable)
+    +Contact create(Contact)
+    +Contact update(Long, Contact, User)
+    +void delete(Long, User)
+    +Contact findById(Long, User)
+    +void deleteAll(List~Long~, User)
+  }
+  class PageController {
+    +contacts(...)
+    +createForm(...)
+    +create(...)
+    +deleteSelected(...)
+    +delete(...)
+    +editForm(...)
+    +update(...)
+    +login()
+    +register()
+    +createUser(...)
+  }
+  class ContactController {
+    +List~Contact~ findAll()
+    +Contact create(Contact)
+    +Contact update(Long, Contact)
+    +void delete(Long)
+  }
+  class SecurityConfig {
+    +authenticationProvider()
+    +securityFilterChain(HttpSecurity)
+  }
+  class CustomUserDetailsService {
+    +loadUserByUsername(String)
   }
 
-  ContactController --> ContactService
-  ContactService --> ContactRepository
-  ContactRepository --> Contact
+  ContactRepository <-- ContactService
+  UserRepository <-- PageController
+  ContactService <-- PageController
+  ContactService <-- ContactController
+  User <-- CustomUserDetailsService
+  CustomUserDetailsService <-- UserRepository
+  SecurityConfig --> CustomUserDetailsService
 ```
 
 ---
 
 ## 設計・実装の特徴
-- レイヤード構成: コントローラー（HTTP） → サービス（ビジネス） → リポジトリ（DB）というシンプルな分離を採用しています。初心者が役割を理解しやすい構造です。
-- JPA を使用した永続化: `Contact` クラスに `@Entity`、`@Id`、`@GeneratedValue` アノテーションが付与されています（`Contact.java`）。
-- アプリケーションの DB 設定は `application.properties` にあり、`spring.jpa.hibernate.ddl-auto=update` が設定されています（起動時にスキーマ更新を試みる設定）。
-- Docker 環境: `docker-compose.yml` により MySQL とアプリケーション、phpMyAdmin を連携させる設定が確認できます。
-- テンプレートエンジン（Thymeleaf）でサーバーサイドにレンダリングした HTML を返します。JavaScript と組み合わせて PWA のサービスワーカーを登録しています。
+- MVC 構成: Controller → Service → Repository（JPA）
+- エンティティにバリデーションアノテーションが付与されている
+- Spring Security によるフォーム認証、`BCryptPasswordEncoder` でパスワードをハッシュ化
+- Flyway による DB スキーマ管理
+- ページネーションに `Pageable` / `Page` を使用
 
 ## 次のステップ（提案）
-- バリデーションの実装
-- Thymeleafによる画面実装
+- 追加テストの実装
