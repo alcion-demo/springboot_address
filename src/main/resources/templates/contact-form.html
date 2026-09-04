@@ -41,6 +41,16 @@
                 </div>
 
                 <div class="mb-3 w-70">
+                    <label class="form-label">郵便番号</label>
+                    <input type="text" th:field="*{postalCode}" class="form-control">
+
+                    <div th:if="${#fields.hasErrors('postalCode')}"
+                        th:errors="*{postalCode}"
+                        class="text-danger">
+                    </div>
+                </div>
+
+                <div class="mb-3 w-70">
                     <label class="form-label">住所</label>
                     <input type="text" th:field="*{address}" class="form-control">
 

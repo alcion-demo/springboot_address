@@ -1,0 +1,2 @@
+ALTER TABLE contact
+MODIFY COLUMN postal_code VARCHAR(10) AFTER email;

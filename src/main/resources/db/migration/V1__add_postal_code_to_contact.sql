@@ -1,0 +1,2 @@
+ALTER TABLE contact
+ADD COLUMN postal_code VARCHAR(10);
