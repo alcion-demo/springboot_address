@@ -6,6 +6,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Pattern;
 
 @Entity //DBのEntityとして扱う
 
@@ -35,11 +37,17 @@ public class Contact {
     }
 
     @NotBlank
+    @Size(max = 20)
     public String getName() {
         return name;
     }
 
     @NotBlank
+    @Size(max = 20)
+    @Pattern(
+        regexp = "^[0-9-]+$",
+        message = "電話番号は数字とハイフンで入力してください"
+    )
     public String getPhone() {
         return phone;
     }
@@ -50,6 +58,8 @@ public class Contact {
         return email;
     }
 
+    @NotBlank
+    @Size(max = 50)
     public String getAddress() {
         return address;
     }
