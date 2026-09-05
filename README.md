@@ -121,6 +121,11 @@ pom.xmlに下記追加
  	<groupId>org.springframework.boot</groupId>
 	<artifactId>spring-boot-starter-security</artifactId>
 </dependency>
+<dependency>
+	<groupId>org.springframework.security</groupId>
+	<artifactId>spring-security-test</artifactId>
+	<scope>test</scope>
+</dependency>
 ```
 
 ## ディレクトリ構成（主要ファイル）
@@ -241,7 +246,7 @@ classDiagram
 - ページネーションに `Pageable` / `Page` を使用
 
 ## 次のステップ（提案）
-- 追加テストの実装  
+- Spring Bootの全体構造を前回より解像度高く意識しながら、もう一度アプリを1本作る  
 
 [![Loom Video](https://img.shields.io/badge/Demo_Video-Loom-625DF5?style=for-the-badge&logo=loom)](https://www.loom.com/share/73a59a41228e443abe83bfb41429603d)
 
