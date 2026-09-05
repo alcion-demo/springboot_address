@@ -15,17 +15,28 @@ import com.example.address_book.service.ContactService;
 
 import jakarta.validation.Valid;
 
+import com.example.address_book.User;
+import com.example.address_book.repository.UserRepository;
+
+import org.springframework.security.core.Authentication;
 
 @RestController
 public class ContactController {
     private final ContactService contactService;
+    private final UserRepository userRepository;
 
     /**
      * コンストラクタ
+     *
      * @param contactService
+     * @param userRepository
      */
-    public ContactController(ContactService contactService) {
+    public ContactController(
+            ContactService contactService,
+            UserRepository userRepository) {
+
         this.contactService = contactService;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/contacts")
@@ -41,14 +52,27 @@ public class ContactController {
     @PutMapping("/contacts/{id}")
     public Contact update(
             @PathVariable Long id,
-            @Valid @RequestBody Contact contact) {
+            @Valid @RequestBody Contact contact,
+            Authentication authentication) {
 
-        return contactService.update(id, contact);
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow();
+
+        return contactService.update(id, contact, user);
     }
 
     @DeleteMapping("/contacts/{id}")
-    public void delete(@PathVariable Long id) {
-        contactService.delete(id);
+    public void delete(@PathVariable Long id,
+            Authentication authentication) {
+
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow();
+
+        contactService.delete(id, user);
     }
 
 }
