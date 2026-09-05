@@ -7,88 +7,150 @@
     <body>
 
         <div class="container mt-4">
+
+            <!-- ヘッダー -->
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h1>住所録</h1>
+
                 <form th:action="@{/logout}" method="post">
                     <button type="submit" class="btn btn-outline-secondary">
                         ログアウト
                     </button>
                 </form>
             </div>
-            <form th:action="@{/contacts/view/delete}" method="post">
-                <table class="table table-bordered table-striped">
-                    <colgroup>
-                        <col style="width: 5%;">
-                        <col style="width: 10%;">
-                        <col style="width: 10%;">
-                        <col style="width: 20%;">
-                        <col style="width: 10%;">
-                        <col style="width: 30%;">
-                        <col style="width: 15%;">
-                    </colgroup>
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>名前</th>
-                            <th>電話番号</th>
-                            <th>メール</th>
-                            <th>郵便番号</th>
-                            <th>住所</th>
-                            <th>操作</th>
-                        </tr>
-                    </thead>
 
-                    <tbody>
-                        <tr th:each="contact : ${contacts}">
-                            <td>
-                                <input type="checkbox"
-                                    name="ids"
-                                    th:value="${contact.id}">
-                            </td>
-                            <td th:text="${contact.name}"></td>
-                            <td th:text="${contact.phone}"></td>
-                            <td th:text="${contact.email}"></td>
-                            <td th:text="${contact.postalCode}"></td>
-                            <td th:text="${contact.address}"></td>
-                            <td>
-                                <a th:href="@{/contacts/view/edit/{id}(id=${contact.id})}"
-                                class="btn btn-primary">
-                                    編集
-                                </a>
 
-                                <form th:action="@{/contacts/view/delete/{id}(id=${contact.id})}"
-                                    method="post"
-                                    class="d-inline">
-                                    <button type="submit" class="btn btn-danger ms-2">
-                                        削除
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <nav aria-label="ページネーション" class="d-flex justify-content-end">
-                    <ul class="pagination">
-                        <li th:each="i : ${#numbers.sequence(0, contacts.totalPages - 1)}"
-                            class="page-item"
-                            th:classappend="${i == contacts.number} ? 'active'">
-                            <a class="page-link"
-                            th:href="@{/contacts/view(page=${i})}"
-                            th:text="${i + 1}">
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
+            <!-- 一括削除用フォーム -->
+            <form id="bulkDeleteForm"
+                  th:action="@{/contacts/view/delete}"
+                  method="post">
+
+                <input type="hidden"
+                       th:name="${_csrf.parameterName}"
+                       th:value="${_csrf.token}">
+
             </form>
+
+
+            <!-- 住所録一覧 -->
+            <table class="table table-bordered table-striped">
+
+                <colgroup>
+                    <col style="width: 5%;">
+                    <col style="width: 10%;">
+                    <col style="width: 10%;">
+                    <col style="width: 20%;">
+                    <col style="width: 10%;">
+                    <col style="width: 30%;">
+                    <col style="width: 15%;">
+                </colgroup>
+
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>名前</th>
+                        <th>電話番号</th>
+                        <th>メール</th>
+                        <th>郵便番号</th>
+                        <th>住所</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr th:each="contact : ${contacts}">
+
+                        <!-- 一括削除用チェックボックス -->
+                        <td>
+                            <input type="checkbox"
+                                   name="ids"
+                                   th:value="${contact.id}"
+                                   form="bulkDeleteForm">
+                        </td>
+
+                        <td th:text="${contact.name}"></td>
+                        <td th:text="${contact.phone}"></td>
+                        <td th:text="${contact.email}"></td>
+                        <td th:text="${contact.postalCode}"></td>
+                        <td th:text="${contact.address}"></td>
+
+                        <!-- 操作 -->
+                        <td>
+
+                            <!-- 編集 -->
+                            <a th:href="@{/contacts/view/edit/{id}(id=${contact.id})}"
+                               class="btn btn-primary">
+                                編集
+                            </a>
+
+                            <!-- 個別削除 -->
+                            <form th:action="@{/contacts/view/delete/{id}(id=${contact.id})}"
+                                  method="post"
+                                  class="d-inline">
+
+                                <input type="hidden"
+                                       th:name="${_csrf.parameterName}"
+                                       th:value="${_csrf.token}">
+
+                                <button type="submit"
+                                        class="btn btn-danger ms-2">
+                                    削除
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+
+            <!-- ページネーション -->
+            <nav aria-label="ページネーション"
+                 class="d-flex justify-content-end">
+
+                <ul class="pagination">
+
+                    <li th:each="i : ${#numbers.sequence(0, contacts.totalPages - 1)}"
+                        class="page-item"
+                        th:classappend="${i == contacts.number} ? 'active'">
+
+                        <a class="page-link"
+                           th:href="@{/contacts/view(page=${i})}"
+                           th:text="${i + 1}">
+                        </a>
+
+                    </li>
+
+                </ul>
+
+            </nav>
+
+
+            <!-- ボタン -->
             <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-danger">
+
+                <!-- 一括削除 -->
+                <button type="submit"
+                        form="bulkDeleteForm"
+                        class="btn btn-danger">
                     一括削除
                 </button>
 
-                <a href="/contacts/view/create" class="btn btn-primary">
+                <!-- 新規登録 -->
+                <a th:href="@{/contacts/view/create}"
+                   class="btn btn-primary">
                     新規登録
                 </a>
+
             </div>
+
         </div>
-    </Body>
+
+    </body>
+
 </html>

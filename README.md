@@ -1,12 +1,14 @@
 # Java - 住所録 アプリ（crud学習用）
 
  <img alt="Static Badge" src="https://img.shields.io/badge/wsl2-w?style=plastic&logo=linux&logoColor=000000&labelColor=%23FCC624&color=%23FCC624"> <img alt="Static Badge" src="https://img.shields.io/badge/ubuntu-u?style=plastic&logo=ubuntu&logoColor=%23ffffff&labelColor=%23E95420&color=%23E95420">
- <img alt="Static Badge" src="https://img.shields.io/badge/Docker-d?style=plastic&logo=docker&logoColor=%23ffffff&labelColor=%232496ED&color=%232496ED">
- <img alt="Static Badge" src="https://img.shields.io/badge/Apache%20Maven-%20?style=plastic&logo=Apache%20Maven&logoColor=%23C71A36&color=000000">  
+ <img alt="Static Badge" src="https://img.shields.io/badge/Docker-d?style=plastic&logo=docker&logoColor=%23ffffff&labelColor=%232496ED&color=%232496ED">  
+ <img alt="Static Badge" src="https://img.shields.io/badge/Apache%20Maven-%20?style=plastic&logo=Apache%20Maven&logoColor=%23C71A36&color=000000">
+ <img alt="Static Badge" src="https://img.shields.io/badge/MySQL-m?style=plastic&logo=mysql&logoColor=%23ffffff&labelColor=%234479A1&color=%234479A1">
+ <img alt="Static Badge" src="https://img.shields.io/badge/bootstrap-b?style=plastic&logo=bootstrap&logoColor=%23ffffff&labelColor=%237952B3&color=%237952B3">  
  <img alt="Static Badge" src="https://img.shields.io/badge/OpenJDK-j?style=plastic&logo=openjdk&logoColor=%23000000">
  <img alt="Static Badge" src="https://img.shields.io/badge/Spring%20Boot-s?style=plastic&logo=springboot&logoColor=%23005F0F">
  <img alt="Static Badge" src="https://img.shields.io/badge/Thymeleaf-t?style=plastic&logo=thymeleaf&logoColor=%23005F0F">
- <img alt="Static Badge" src="https://img.shields.io/badge/MySQL-m?style=plastic&logo=mysql&logoColor=%23ffffff&labelColor=%234479A1&color=%234479A1">  
+
 
 ## プロジェクト概要
 このリポジトリは、Java と Spring Boot を使って作成したシンプルな 住所録のサンプルアプリです。  
@@ -48,7 +50,7 @@ Docker / Maven などの環境構築や設定は自分で検討し、自作し�
 | **Authentication / Authorization** | Spring Security |
 | **Template Engine** | Thymeleaf |
 | **Infrastructure** | Docker Compose ,Maven |
-| **OS Environment** | WSL2 (Ubuntu / Alpine Linux) |
+| **OS Environment** | WSL2 (Ubuntu) |
 | **Database** | Spring Data JPA, MySQL |
 | **Database Migration** | Flyway |
 
@@ -239,4 +241,8 @@ classDiagram
 - ページネーションに `Pageable` / `Page` を使用
 
 ## 次のステップ（提案）
-- 追加テストの実装
+- 追加テストの実装  
+
+[![Loom Video](https://img.shields.io/badge/Demo_Video-Loom-625DF5?style=for-the-badge&logo=loom)](https://www.loom.com/share/73a59a41228e443abe83bfb41429603d)
+
+[▶️ 動作デモ動画を視聴する（Loom）](https://www.loom.com/embed/73a59a41228e443abe83bfb41429603d)
